@@ -1,0 +1,45 @@
+version: "3.9"
+
+services:
+  selenoid:
+    image: aerokube/selenoid:latest
+    container_name: selenoid
+    networks:
+      - selenoid-net
+    ports:
+      - "4444:4444"
+    volumes:
+      - ./browsers.json:/etc/selenoid/browsers.json
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: ["-container-network", "ci_selenoid-net"]  # Use your chosen COMPOSE_PROJECT_NAME here
+
+  selenoid-ui:
+    image: aerokube/selenoid-ui:latest
+    networks:
+      - selenoid-net
+    ports:
+      - "8080:8080"
+    command: ["--selenoid-uri", "http://selenoid:4444"]
+    depends_on:
+      - selenoid
+
+  tests:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    networks:
+      - selenoid-net
+    depends_on:
+      - selenoid
+    environment:
+      - SELENOID_URL=http://selenoid:4444/wd/hub
+    volumes:
+      - ./reports:/app/reports
+    tty: true
+    command: >
+      bash -c "pytest --alluredir=/app/reports/allure-results &&
+               allure generate --single-file /app/reports/allure-results --clean -o /app/reports/allure-report"
+
+networks:
+  selenoid-net:
+    driver: bridge
