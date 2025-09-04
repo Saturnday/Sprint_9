@@ -1,9 +1,9 @@
 from helpers.generate_a_user import UserData
 
 class TestData:
-    BASE_URL = "https://foodgram-frontend-1.prakticum-team.ru/recipes"
 
-    RECIPE_URL = "https://foodgram-frontend-1.prakticum-team.ru/recipes/create"
+    BASE_URL = "https://foodgram-frontend-1.prakticum-team.ru/"
+
 
     # Existing test account
     EXISTING_EMAIL = 'sdf@sdf.com'

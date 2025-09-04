@@ -6,7 +6,7 @@ from locators.locators import CreateRecipePageLocators
 
 class CreateRecipe(BasePage):
 
-    URL = TestData.BASE_URL
+    URL = f"{TestData.BASE_URL}/recipes"
 
     @allure.step("Открыть главную страницу")
     def open(self):
@@ -25,7 +25,7 @@ class CreateRecipe(BasePage):
 
         self.find_element(CreateRecipePageLocators.BUTTON_GO_TO_CREATE_RECIPE)
         self.click(CreateRecipePageLocators.BUTTON_GO_TO_CREATE_RECIPE)
-        URL = TestData.RECIPE_URL
+        URL = f"{TestData.BASE_URL}/recipes/create"
         self.open_url(URL)
         self.wait_for_page_ready()
 
